@@ -17,11 +17,12 @@ class Home extends Component {
       button: "Converter",
       disabled: false,
       money: "R$",
-      moneyResult: "Moeda"
+      moneyResult: "$"
     };
     this.handleChange = this.handleChange.bind(this);
     this.convert = this.convert.bind(this);
     this.limpar = this.limpar.bind(this);
+    this.click = this.click.bind(this);
   }
 
   handleChange(event) {
@@ -32,6 +33,27 @@ class Home extends Component {
       [name]: value
     });
   }
+
+  click() {
+    if (this.state.escolha === "USD") {
+      this.setState({
+        moneyResult: "$"
+      });
+    } else if (this.state.escolha === "EUR") {
+      this.setState({
+        moneyResult: "€"
+      });
+    } else if (this.state.escolha === "ARS") {
+      this.setState({
+        moneyResult: "ARS"
+      });
+    } else if (this.state.escolha === "JPY") {
+      this.setState({
+        moneyResult: "円"
+      });
+    }
+  }
+
   convert() {
     if (this.state.num1 === "") {
       this.setState({ class: "is-invalid" });
@@ -60,12 +82,10 @@ class Home extends Component {
             valor = valor.replace(",", ".");
             valor = Number(valor);
             let total = valor * this.state.num1;
-
             this.setState({
               result: total.toFixed(2),
               button: "Converter",
-              disabled: false,
-              moneyResult: "$"
+              disabled: false
             });
           } else if (escolha === "EUR") {
             let valor = data.EUR.high;
@@ -75,8 +95,7 @@ class Home extends Component {
             this.setState({
               result: total.toFixed(2),
               button: "Converter",
-              disabled: false,
-              moneyResult: "€"
+              disabled: false
             });
           } else if (escolha === "ARS") {
             let valor = data.ARS.high;
@@ -86,8 +105,7 @@ class Home extends Component {
             this.setState({
               result: total.toFixed(2),
               button: "Converter",
-              disabled: false,
-              moneyResult: "ARS"
+              disabled: false
             });
           } else if (escolha === "JPY") {
             let valor = data.JPY.high;
@@ -97,8 +115,7 @@ class Home extends Component {
             this.setState({
               result: total.toFixed(2),
               button: "Converter",
-              disabled: false,
-              moneyResult: "円"
+              disabled: false
             });
           }
         });
@@ -110,7 +127,7 @@ class Home extends Component {
       num1: "",
       result: "",
       class: "",
-      moneyResult: "Moeda"
+      moneyResult: "$"
     });
   }
 
@@ -136,12 +153,28 @@ class Home extends Component {
           <div className="row">
             <div className="col-6">
               <div className="form-group">
+                <select
+                  className="form-control"
+                  name="escolha"
+                  value={this.state.escolha}
+                  onChange={this.handleChange}
+                  onClick={this.click}
+                >
+                  <option value="USD" >Dólar $</option>
+                  <option value="EUR">Euro €</option>
+                  <option value="ARS">Peso Argentino ARS</option>
+                  <option value="JPY">Iene Japones 円</option>
+                </select>
+              </div>
+            </div>
+            <div className="col-6">
+              <div className="form-group">
                 <div className="input-group mb-3">
                   <div className="input-group-prepend">
                     <span
                       className="input-group-text"
                       dangerouslySetInnerHTML={{
-                        __html: `${this.state.money}`
+                        __html: `${this.state.moneyResult}`
                       }}
                     ></span>
                   </div>
@@ -156,21 +189,6 @@ class Home extends Component {
                 </div>
               </div>
             </div>
-            <div className="col-6">
-              <div className="form-group">
-                <select
-                  className="form-control"
-                  name="escolha"
-                  value={this.state.escolha}
-                  onChange={this.handleChange}
-                >
-                  <option value="USD">Dólar $</option>
-                  <option value="EUR">Euro €</option>
-                  <option value="ARS">Peso Argentino ARS</option>
-                  <option value="JPY">Iene Japones 円</option>
-                </select>
-              </div>
-            </div>
           </div>
           <div className="row justify-content-center mt-5">
             <div className="col-12">
@@ -180,7 +198,7 @@ class Home extends Component {
                     <span
                       className="input-group-text"
                       dangerouslySetInnerHTML={{
-                        __html: `${this.state.moneyResult}`
+                        __html: `${this.state.money}`
                       }}
                     ></span>
                   </div>
